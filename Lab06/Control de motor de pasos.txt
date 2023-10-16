@@ -1,0 +1,356 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.numeric_std.ALL;
+use IEEE.std_logic_arith.ALL;
+use IEEE.std_logic_unsigned.ALL;
+
+
+entity Lab06 is
+  Port (  		
+        clk: in std_logic; -- Reloj
+ 		FILAS: inout std_logic_vector (3 downto 0);
+ 		COLUMNAS: in std_logic_vector (3 downto 0) := "0000"; -- Posici?n pulsada
+ 		
+ 		Disp: out std_logic_vector (7 downto 0); -- Vector que establecer? cu?les displays encender
+       	Num7Seg: out std_logic_vector (6 DOWNTO 0); -- C?digo del n?mero correspondiente al 7 Segmentos
+       	
+       	LEDMODO, LEDCARGA, LEDROTA: out std_logic; 
+       	
+        MOTOR: out std_logic_vector (3 downto 0) := "0011"
+        );
+end Lab06;
+
+architecture Behavioral of Lab06 is
+
+component  LIB_TEC_MATRICIAL_4X4_INTESC_REVA is
+generic( FREQ_CLK : integer := 50_000_000);
+port( CLK        : in  std_logic;
+      COLUMNAS   : in  std_logic_vector(3 downto 0);
+      FILAS      : out std_logic_vector(3 downto 0);
+      BOTON_PRES : out std_logic_vector(3 downto 0);
+      IND        : out std_logic
+     );
+
+end component LIB_TEC_MATRICIAL_4X4_INTESC_REVA;
+
+------------------------------------------------------------------
+
+	constant NumMax: INTEGER := 49999;
+	constant NumMax2: INTEGER := 4999999;
+	
+	signal conteo: INTEGER range 0 to NumMax;
+	signal conteo2: INTEGER;
+	
+	signal clck_state: std_logic; -- Permite el cambio de display.
+	signal clck_state100: std_logic;
+
+------------------------------------------------------------------
+    
+    signal Cambio: std_logic_vector(2 downto 0) := "000";    
+    signal Cambio2: std_logic_vector(2 downto 0) := "000";   
+    signal digit: std_logic_vector (3 downto 0);
+    signal Velocidad, Angle: integer := 5;
+
+    signal unidad, decena, centena, miles, diezmiles, cienmiles, millones, diezmillones: std_logic_vector (3 downto 0) := "0000"; 
+    signal DigUnidad, DigDecena, DigCentena, DigMiles, DigDiezmiles, DigCienmiles, DigMillones, DigDiezmillones: integer range 0 to 9;
+    signal DigUnidad1, DigDecena1, DigCentena1, DigMiles1, DigDiezmiles1, DigCienmiles1, DigMillones1, DigDiezmillones1: integer range 0 to 9;
+    
+    
+    signal Digitos1, Digitos2, DigitosRes: integer;
+
+    signal boton_pres : std_logic_vector(3 downto 0) := (others => '0');
+    signal IND, IND_S        : std_logic := '0';
+    signal MODO: STD_LOGIC;
+    signal carga: std_logic;
+    signal rotando: std_logic;
+    signal veces: integer;
+-----------------------------------------------------
+
+function BcdTo7Seg (
+    BCD: in std_logic_vector(3 downto 0)) -- C?digo binario del d?gito
+    return std_logic_vector is
+    
+    variable Cod7Seg: std_logic_vector (6 downto 0);
+    
+    begin
+    with BCD select -- Selecci?n de la combinaci?n de ?nodos en el display.
+        Cod7Seg :=    ("0000001") WHEN ("0000"),
+            ("1001111") WHEN ("0001"),
+            ("0010010") WHEN ("0010"),
+            ("0000110") WHEN ("0011"),
+            ("1001100") WHEN ("0100"),
+            ("0100100") WHEN ("0101"),
+            ("0100000") WHEN ("0110"),
+            ("0001111") WHEN ("0111"),
+            ("0000000") WHEN ("1000"),
+            ("0000100") WHEN ("1001"),
+            ("0001000") WHEN ("1010"),
+            ("1100000") WHEN ("1011"),
+            ("0110001") WHEN ("1100"),
+            ("1000010") WHEN ("1101"),
+            ("0110000") WHEN ("1110"),
+            ("1111111") WHEN OTHERS;
+    return Cod7Seg; -- Devoluci?n del respectivo valor.
+end function;
+
+function IntToBin (
+    Int: in integer) -- C?digo binario del d?gito
+    return std_logic_vector is
+    
+    variable Bin: std_logic_vector (3 downto 0);
+    
+    begin
+    with Int select -- Selecci?n de la combinaci?n de ?nodos en el display.
+        Bin :=    ("0000") WHEN (0),
+            ("0001") WHEN (1),
+            ("0010") WHEN (2),
+            ("0011") WHEN (3),
+            ("0100") WHEN (4),
+            ("0101") WHEN (5),
+            ("0110") WHEN (6),
+            ("0111") WHEN (7),
+            ("1000") WHEN (8),
+            ("1001") WHEN OTHERS;
+    return Bin; -- Devoluci?n del respectivo valor.
+end function;
+
+function BinToInt (
+    Bin2: in std_logic_vector (3 downto 0)) -- C?digo binario del d?gito
+    return integer is
+    
+    variable Int2: integer;
+    
+    begin
+    with Bin2 select -- Selecci?n de la combinaci?n de ?nodos en el display.
+        Int2 :=    (0) WHEN ("0000"),
+            (1) WHEN ("0001"),
+            (2) WHEN ("0010"),
+            (3) WHEN ("0011"),
+            (4) WHEN ("0100"),
+            (5) WHEN ("0101"),
+            (6) WHEN ("0110"),
+            (7) WHEN ("0111"),
+            (8) WHEN ("1000"),
+            (9) WHEN ("1001"),
+            (10) WHEN ("1010"),
+            (11) WHEN ("1011"),
+            (12) WHEN ("1100"),
+            (13) WHEN ("1101"),
+            (14) WHEN ("1110"),
+            (15) WHEN OTHERS;
+    return Int2; -- Devoluci?n del respectivo valor.
+end function;
+        
+-----------------------------------------------------
+begin
+-----------------------------------------------------
+
+digit  <= boton_pres;
+ind_s <= ind;
+LEDMODO <= MODO;
+LEDCARGA <= carga;
+LEDROTA <= rotando;
+
+-----------------------------------------------------
+
+NUM_READ : LIB_TEC_MATRICIAL_4X4_INTESC_REVA
+
+generic map( FREQ_CLK => 50_000_000)
+
+port map( 
+          CLK        => CLK, 
+          COLUMNAS   => COLUMNAS, 
+          FILAS      => FILAS, 
+          BOTON_PRES => boton_pres,
+          IND        => IND
+        );
+
+Reconteo: process(CLK) -- Va a "mandar una se?al" a clock_state cada 1 ms
+begin
+	if CLK'event and CLK = '1' then
+		if conteo < NumMax then 
+			conteo <= conteo + 1;
+		else
+			clck_state <= not clck_state;
+			conteo <= 0;
+		end if;
+	end if;
+end process;
+
+Revisa: process(CLK, Velocidad) -- Va a "mandar una se?al" a clock_state cada x ms
+begin
+	if CLK'event and CLK = '1' then
+		if Velocidad = 0 then
+		  null;
+		elsif conteo2 < ((50_000_000*360)/(Velocidad*200)) then 
+			conteo2 <= conteo2 + 1;
+		else
+			clck_state100 <= not clck_state100;
+			conteo2 <= 0;
+		end if;
+	end if;
+end process;
+
+cambiador: process(clck_state)
+begin 
+    if clck_state'event and clck_state = '1' then
+        if Cambio < "111" then
+            Cambio <= Cambio + 1;
+        else 
+            Cambio <= "000";
+        end if;
+    end if;         
+end process;
+
+cambiador2: process(clck_state100)
+begin 
+    if clck_state100'event and clck_state100 = '1' then
+        if Cambio2 < "111" then
+            Cambio2 <= Cambio2 + 1;
+        else 
+            Cambio2 <= "000";
+        end if;
+    end if;     
+end process;
+
+Motooor: process(cambio2)
+begin 
+    if modo = '0' then
+        if Cambio2 = "000" then
+            motor <= "0001";
+        elsif Cambio2 = "001" then
+            motor <= "0011";
+        elsif Cambio2 = "010" then
+            motor <= "0010";
+        elsif Cambio2 = "011" then
+            motor <= "0110";
+        elsif Cambio2 = "100" then
+            motor <= "0100";
+        elsif Cambio2 = "101" then
+            motor <= "1100";
+        elsif Cambio2 = "110" then
+            motor <= "1001";
+        elsif Cambio2 = "111" then 
+            motor <= "1000";
+        end if;  
+    else 
+        if rotando = '1' and veces < (Angle*10/18) then
+            if Cambio2 = "000" then
+                motor <= "0001";
+            elsif Cambio2 = "001" then
+                motor <= "0011";
+            elsif Cambio2 = "010" then
+                motor <= "0010";
+            elsif Cambio2 = "011" then
+                motor <= "0110";
+            elsif Cambio2 = "100" then
+                motor <= "0100";
+            elsif Cambio2 = "101" then
+                motor <= "1100";
+            elsif Cambio2 = "110" then
+                motor <= "1001";
+            elsif Cambio2 = "111" then 
+                motor <= "1000";
+            end if;             
+            veces <= veces + 1;
+        elsif rotando = '0' then
+            veces <= 0;
+        end if; 
+    end if;
+end process;
+
+
+ShowsNumber: process(ind_s)
+variable aux1, aux2, aux3, aux4, aux5, aux6, aux7, aux8: std_logic_vector (3 downto 0);
+begin 
+        if rising_edge (ind_s) then 
+            if digit = "1110" then 
+                if modo = '1' then
+                    modo <= '0';
+                elsif modo = '0' then
+                    modo <= '1';
+                end if;
+                carga <= '0';         
+            elsif digit <= "1001" then 
+                if carga = '1' then
+                    carga <= '0';
+                    aux6 := "0000";
+                    aux7 := "0000";
+                    aux8 := digit;
+                else
+                    aux6 := decena;
+                    aux7 := unidad;
+                    aux8 := digit;
+                end if;
+                
+                centena <= aux6;            
+                decena <= aux7;            
+                unidad <= aux8;
+                carga <= '0';         
+            elsif digit = "1111" then
+                carga <= '1';     
+            else 
+                carga <= '0';    
+            end if;
+        end if; 
+end process;
+
+ProcesoDeCarga: process(carga, veces)
+begin
+    
+    if rotando = '1' and veces >= (Angle*10/18) then
+        rotando <= '0';
+        --Angle <= 0;
+    elsif carga = '1' then  
+         if modo = '0' then
+     
+            digcentena       <= bintoint(centena     );    
+            digdecena        <= bintoint(decena      );    
+            digunidad        <= bintoint(unidad      );    
+            
+            Velocidad <= digcentena*100 + digdecena*10 + digunidad; --DigDiezmillones*10000000 + DigMillones*1000000 + DigCienmiles*100000 + Digdiezmiles*10000 + digmiles*1000 + digcentena*100 + digdecena*10 + digunidad;
+        elsif modo = '1' then
+    
+            digcentena1       <= bintoint(centena     );  
+            digdecena1        <= bintoint(decena      );  
+            digunidad1        <= bintoint(unidad      );      
+            
+            Angle <= digcentena1*100 + digdecena1*10 + digunidad1; --DigDiezmillones1*10000000 + DigMillones1*1000000 + DigCienmiles1*100000 + Digdiezmiles1*10000 + digmiles1*1000 + digcentena1*100 + digdecena1*10 + digunidad1;
+            Velocidad <= 10;
+            rotando <= '1';
+        end if;
+    end if;
+end process;
+
+Muestra_display: process(cambio, unidad, decena, centena, miles, diezmiles, cienmiles, millones, diezmillones)
+begin
+
+        if Cambio = "000" then
+            Disp <= "11111110";
+            Num7Seg <= BcdTo7Seg(unidad);
+        elsif Cambio = "001" then
+            Disp <= "11111101";
+            Num7Seg <= BcdTo7Seg(decena);
+        elsif Cambio = "010" then
+            Disp <= "11111011";
+            Num7Seg <= BcdTo7Seg(centena);
+        elsif Cambio = "011" then
+            Disp <= "11110111";
+            Num7Seg <= BcdTo7Seg(miles);         
+        elsif Cambio = "100" then
+            Disp <= "11101111";
+            Num7Seg <= BcdTo7Seg(diezmiles);
+        elsif Cambio = "101" then
+            Disp <= "11011111";
+            Num7Seg <= BcdTo7Seg(cienmiles);
+        elsif Cambio = "110" then
+            Disp <= "10111111";
+            Num7Seg <= BcdTo7Seg(millones);
+        else
+            Disp <= "01111111";
+            Num7Seg <= BcdTo7Seg(diezmillones);     
+        end if;    
+end process;
+
+
+end Behavioral;

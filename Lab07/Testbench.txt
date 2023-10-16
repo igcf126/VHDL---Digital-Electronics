@@ -1,0 +1,72 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
+ 
+entity testbench is
+-- empty
+end testbench; 
+
+architecture tb of testbench is
+
+-- DUT component
+component Lab07 is
+port(
+      clk : in std_logic; -- reloj
+      reset : in std_logic; -- reset asincrono, activo high
+
+      pdata : in std_logic_vector(7 downto 0); -- datos en paralelo (dato a enviar)
+      load : in std_logic; -- cargar TBR
+
+      txd : out std_logic; -- salida de transmision de datos
+      empty : out std_logic); -- TBR vacio, active high
+end component;
+
+signal clk_in : std_logic; 
+signal reset_in : std_logic;
+
+signal pdata_in : std_logic_vector(7 downto 0); 
+signal load_in : std_logic;
+
+signal txd_out : std_logic;
+signal empty_out : std_logic;
+
+signal stop : boolean := false;
+constant period: TIME := 10NS;
+
+begin
+  -- Connect DUT
+  DUT: Lab07 port map(clk_in, reset_in, pdata_in, load_in, txd_out, empty_out);
+
+  
+clock_gen : process
+begin
+	while not stop loop
+		clk_in <= '0';
+		wait for period/2;
+		clk_in <= '1';
+		wait for period/2;
+	end loop;
+	wait;
+end process clock_gen;
+
+
+stimulus : process
+  begin
+  	--wait for period;
+	reset_in <= '1';
+	load_in <= '0';
+	pdata_in <= "10110110";
+
+	wait for period; 
+
+	reset_in <= '0';
+	load_in <= '1';
+    
+    wait for period*27;
+    
+    
+    stop <= true;
+    wait;
+end process stimulus;
+
+end tb;

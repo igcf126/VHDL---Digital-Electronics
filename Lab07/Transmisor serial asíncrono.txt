@@ -1,0 +1,101 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
+
+entity Lab07 is
+    port (
+            clk : in std_logic; -- reloj
+            reset : in std_logic; -- reset asincrono, activo high
+            
+            pdata : in std_logic_vector(7 downto 0); -- datos en paralelo (dato a enviar)
+            load : in std_logic; -- cargar TBR
+            
+            txd : out std_logic; -- salida de transmision de datos
+            empty : out std_logic); -- TBR vacio, active high
+end Lab07;
+
+architecture Behavioral of Lab07 is
+  signal clk_state : std_logic := '0';
+  signal clk_counter : integer range 0 to 5208;
+  
+  signal tx_bit : integer range 0 to 7;
+  
+  type tx_state_t is (IDLE, START, DATA, STOP); -- Estados: inactivo, inicia, datos, para
+  signal tx_state : tx_state_t; 
+  
+  signal char_tx : std_logic_vector(7 downto 0);
+  
+  signal wait_50 : integer range 0 to 50;
+  
+begin
+
+char_tx <= pdata;
+
+-----------------------------------------------------
+-- Divisor de reloj de 100Mhz a 9600 bps
+-----------------------------------------------------
+process(clk, load)
+begin
+  if (load = '0') then
+    clk_state <= '0';
+  elsif(rising_edge(clk)) then
+		if clk_counter = 5208 then 
+			clk_state <= not clk_state;
+			clk_counter <= 0;		
+        else
+			clk_counter <= clk_counter + 1;
+		end if;
+  end if;  
+ end process;    
+
+  
+-----------------------------------------------------
+-- Máquina de estados que forma la trama
+----------------------------------------------------
+ process(clk_state, reset)
+ begin
+    if (reset = '1') then
+        txd <= '1';
+        tx_state <= IDLE;
+        tx_bit <= 0;
+        empty <= '1';
+--        char_pointer <= 0;
+        wait_50 <= 0;
+    
+    elsif(rising_edge(clk_state)) then
+        case(tx_state) is
+          when IDLE =>  
+            txd <= '1';
+            tx_bit <= 0;
+            
+            if(wait_50 = 50) then
+              tx_state <= START;
+              wait_50 <= 0;
+            else
+              wait_50 <= wait_50 + 1;
+            end if;	 
+            
+            
+          when START => -- Space = 0; Mark = 1
+            txd <= '0';
+            tx_state <= DATA; 
+            
+          when DATA => -- Carga byte (TSR)
+            txd <= char_tx(tx_bit);
+            
+            if(tx_bit = 7) then
+              tx_state <= STOP;
+            else
+              tx_bit <= tx_bit + 1;
+            end if;
+            
+            
+          when STOP => -- Space = 1; Mark = 1
+            txd <= '1';
+--            tx_state <= IDLE;
+            empty <= '0';
+         end case; 
+    end if;
+end process;     
+
+end Behavioral;
