@@ -1,0 +1,39 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.std_logic_arith.ALL;
+use IEEE.std_logic_unsigned.ALL;
+
+entity Laboratorio02 is
+ Port (
+ 		NumBin: in std_logic_vector (3 downto 0);
+       	NumDec: OUT std_logic_vector (6 DOWNTO 0);
+       	an: OUT std_logic_vector (7 DOWNTO 0)  
+       	
+        );
+end Laboratorio02;
+
+
+architecture Behavioral of Laboratorio02 is
+
+begin
+    with NumBin select
+        -- Los 7 dígitos de NumDec corresponden a las salidas abcdefg respectivamente
+    NumDec <=    ("0000001") WHEN ("0000"),
+            ("1001111") WHEN ("0001"),
+            ("0010010") WHEN ("0010"),
+            ("0000110") WHEN ("0011"),
+            ("1001100") WHEN ("0100"),
+            ("0100100") WHEN ("0101"),
+            ("0100000") WHEN ("0110"),
+            ("0001111") WHEN ("0111"),
+            ("0000000") WHEN ("1000"),
+            ("0000100") WHEN ("1001"),
+            ("0001000") WHEN ("1010"),
+            ("1100000") WHEN ("1011"),
+            ("0110001") WHEN ("1100"),
+            ("1000010") WHEN ("1101"),
+            ("0110000") WHEN ("1110"),
+            ("0111000") WHEN OTHERS;
+            
+    an <= "11110110";
+end Behavioral;

@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Vivado v2020.2 (64-bit)
+# SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+# IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+# Start of session at: Mon May 10 18:44:23 2021
+# Process ID: 13840
+# Current directory: C:/Users/new/Dropbox/Shared DB ATEES/ian/INTEC/Laboratorio de ele digital/Lab0/Proyectos/HolaMundo/HolaMundo.runs/synth_1
+# Command line: vivado.exe -log HolaMundo.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source HolaMundo.tcl
+# Log file: C:/Users/new/Dropbox/Shared DB ATEES/ian/INTEC/Laboratorio de ele digital/Lab0/Proyectos/HolaMundo/HolaMundo.runs/synth_1/HolaMundo.vds
+# Journal file: C:/Users/new/Dropbox/Shared DB ATEES/ian/INTEC/Laboratorio de ele digital/Lab0/Proyectos/HolaMundo/HolaMundo.runs/synth_1\vivado.jou
+#-----------------------------------------------------------
+source HolaMundo.tcl -notrace

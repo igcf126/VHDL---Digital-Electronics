@@ -1,0 +1,45 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.std_logic_arith.ALL;
+use IEEE.std_logic_unsigned.ALL;
+
+entity Ej4 is
+ Port (
+ 		E: in std_logic;
+       	O: OUT std_logic_vector (7 DOWNTO 0);
+       	Sel: in std_logic_vector (2 DOWNTO 0)  
+        );
+end Ej4;
+
+
+architecture Behavioral of Ej4 is
+
+begin
+process(Sel, E)
+begin
+
+for i in 0 to 7 loop
+    if Sel = "000" and i = 0 then 
+        O(i) <= E;
+    elsif Sel = "001" and i = 1 then
+        O(i) <= E;
+    elsif Sel = "010" and i = 2 then 
+        O(i) <= E;
+    elsif Sel = "011" and i = 3 then
+        O(i) <= E;
+    elsif Sel = "100" and i = 4 then 
+        O(i) <= E;
+    elsif Sel = "101" and i = 5 then
+        O(i) <= E;
+    elsif Sel = "110" and i = 6 then 
+        O(i) <= E;
+    elsif Sel = "111" and i = 7 then 
+        O(i) <= E;
+    else 
+        O(i) <= '0';
+    end if;
+end loop;
+
+end process;
+
+end Behavioral;

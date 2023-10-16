@@ -1,0 +1,35 @@
+----------------------------------------------------------------------------------
+-- Company: Intec
+-- Engineer: Ian Cañas
+-- 
+-- Create Date: 05/8/2021 11:10:13 AM
+-- Design Name: ALU
+-- Module Name: ALU - Behavioral
+-- Project Name: Unidad artmeticológica
+----------------------------------------------------------------------------------
+
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.std_logic_arith.ALL;
+use IEEE.std_logic_unsigned.ALL;
+
+entity ALU is
+Port (SEL : in std_logic_vector(1 downto 0);
+      ent_1 : in std_logic_vector (1 downto 0);
+      ent_2 : in std_logic_vector (1 downto 0);
+      salida : out std_logic_vector (1 downto 0));
+end ALU;
+
+architecture Behavioral of ALU is
+
+begin
+
+with SEL select
+    salida <= ent_1 + ent_2 when "00",
+              ent_1 - ent_2 when "01",
+              ent_1 or ent_2 when "10",
+              ent_1 and ent_2 when others;
+              
+
+end Behavioral;

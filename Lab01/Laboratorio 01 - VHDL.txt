@@ -1,0 +1,55 @@
+----------------------------------------------------------------------------------
+-- Company: Instituto Tecnológico de Santo Domingo
+-- Engineer: Ian Gabriel Cañas Fernández
+-- 
+-- Create Date: 05/12/2021 08:14:17 PM
+-- Design Name: Compuertas lógicas unificadas
+-- Module Name: Laboratorio01 - Behavioral
+-- Project Name: Laboratorio01
+-- Target Devices: Nexys-A7
+-- Description: este es un documento con 8 funciones lógicas combinadas en una sola configuración
+-- 
+-- Revision: Paul B. Vicioso O.
+-- Revision 0.01 - File Created
+-- 
+----------------------------------------------------------------------------------
+
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity Laboratorio01 is
+    Port (  A : in std_logic;
+            B : in std_logic;
+            C : in std_logic;
+            D : in std_logic;
+            E : in std_logic;
+            
+            LA : out std_logic;
+            LB : out std_logic;
+            LC : out std_logic; 
+            LD : out std_logic;
+            
+            LE : out std_logic;
+            LF : out std_logic;
+            LG : out std_logic;
+            LH : out std_logic
+            );
+end Laboratorio01;
+
+architecture Behavioral of Laboratorio01 is
+
+begin
+
+LA <= A OR B;
+LB <= A AND B;
+LC <= A OR B OR C;
+LD <= A AND B AND C; 
+
+LE <= (NOT A) OR B;
+LF <= (A OR B) AND C;
+LG <= (NOT A) AND B AND C AND (NOT (A OR D));
+LH <= (D OR (NOT ((A OR B) AND C))) AND E; 
+
+
+end Behavioral;

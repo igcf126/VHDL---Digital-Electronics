@@ -1,0 +1,30 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.std_logic_arith.ALL;
+use IEEE.std_logic_unsigned.ALL;
+
+entity Ej3 is
+ Port (
+ 		I0, I1: in std_logic_vector (3 downto 0);
+       	Z: out std_logic_vector (3 DOWNTO 0);
+       	Sel: in std_logic_vector (1 DOWNTO 0) -- donde Sel(0) = S y Sel(1) = E
+        );
+end Ej3;
+
+
+architecture Behavioral of Ej3 is
+begin
+
+process(I0, I1, Sel)
+begin
+
+if Sel(1) = '0' then 
+    Z <= "0000";
+elsif Sel(0) = '0' then  
+    Z <= I0;
+elsif Sel(0) = '1' then
+    Z <= I1;
+end if;
+
+end process;
+end Behavioral;

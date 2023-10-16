@@ -1,0 +1,31 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.std_logic_arith.ALL;
+use IEEE.std_logic_unsigned.ALL;
+
+entity Ej2 is
+ Port (
+ 		DCBA: in std_logic_vector (3 downto 0);
+       	O: OUT std_logic_vector (9 DOWNTO 0)
+        );
+end Ej2;
+architecture Behavioral of Ej2 is
+begin
+process(DCBA)
+begin
+case DCBA is -- checar salida negada
+when "0000" => O <= "1111111110";
+when "0001" => O <= "1111111101";
+when "0010" => O <= "1111111011";
+when "0011" => O <= "1111110111";
+when "0100" => O <= "1111101111";
+when "0101" => O <= "1111011111";
+when "0110" => O <= "1110111111";
+when "0111" => O <= "1101111111";
+when "1000" => O <= "1011111111";
+when "1001" => O <= "0111111111";
+when others => O <= "0000000000";
+end case;
+
+end process;
+end Behavioral;

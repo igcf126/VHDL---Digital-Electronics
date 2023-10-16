@@ -1,0 +1,62 @@
+#-----------------------------------------------------------
+# Vivado v2020.2 (64-bit)
+# SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+# IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+# Start of session at: Mon May 10 18:25:37 2021
+# Process ID: 7252
+# Current directory: C:/Users/new/Dropbox/Shared DB ATEES/ian/INTEC/Laboratorio de ele digital/Lab0/Proyectos/HolaMundo
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent17168 C:\Users\new\Dropbox\Shared DB ATEES\ian\INTEC\Laboratorio de ele digital\Lab0\Proyectos\HolaMundo\HolaMundo.xpr
+# Log file: C:/Users/new/Dropbox/Shared DB ATEES/ian/INTEC/Laboratorio de ele digital/Lab0/Proyectos/HolaMundo/vivado.log
+# Journal file: C:/Users/new/Dropbox/Shared DB ATEES/ian/INTEC/Laboratorio de ele digital/Lab0/Proyectos/HolaMundo\vivado.jou
+#-----------------------------------------------------------
+start_gui
+exit
+INFO: [Common 17-206] Exiting Vivado at Mon May 10 18:26:23 2021...
+ de ele digital/Lab0/Proyectos/HolaMundo/HolaMundo.xpr}
+INFO: [ProjectBase 1-489] The host OS only allows 260 characters in a normal path. The project is stored in a path with more than 80 characters. If you experience issues with IP, Block Designs, or files not being found, please consider moving the project to a location with a shorter path. Alternately consider using the OS subst command to map part of the path to a drive letter.
+Current project path is 'C:/Users/new/Dropbox/Shared DB ATEES/ian/INTEC/Laboratorio de ele digital/Lab0/Proyectos/HolaMundo'
+WARNING: [filemgmt 56-3] Default IP Output Path : Could not find the directory 'C:/Users/new/Dropbox/Shared DB ATEES/ian/INTEC/Laboratorio de ele digital/Lab0/Proyectos/HolaMundo/HolaMundo.gen/sources_1'.
+Scanning sources...
+Finished scanning sources
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2020.2/data/ip'.
+open_project: Time (s): cpu = 00:00:25 ; elapsed = 00:00:13 . Memory (MB): peak = 1019.191 ; gain = 0.000
+exit
+INFO: [Common 17-206] Exiting Vivalaunch_runs impl_1 -to_step write_bitstream -jobs 4
+CRITICAL WARNING: [filemgmt 20-730] Could not find a top module in the fileset sources_1.
+Resolution: With the gui up, review the source files in the Sources window. Use Add Sources to add any needed sources. If the files are disabled, enable them. You can also select the file and choose Set Used In from the pop-up menu. Review if they are being used at the proper points of the flow.
+[Mon May 10 18:35:39 2021] Launched synth_1...
+Run output will be captured here: C:/Users/new/Dropbox/Shared DB ATEES/ian/INTEC/Laboratorio de ele digital/Lab0/Proyectos/HolaMundo/HolaMundo.runs/synth_1/runme.log
+[Mon May 10 18:35:39 2021] Launched impl_1...
+Run output will be captured here: C:/Users/new/Dropbox/Shared DB ATEES/ian/INTEC/Laboratorio de ele digital/Lab0/Proyectos/HolaMundo/HolaMundo.runs/impl_1/runme.log
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 4
+CRITICAL WARNING: [filemgmt 20-730] Could not find a top module in the fileset sources_1.
+Resolution: With the gui up, review the source files in the Sources window. Use Add Sources to add any needed sources. If the files are disabled, enable them. You can also select the file and choose Set Used In from the pop-up menu. Review if they are being used at the proper points of the flow.
+[Mon May 10 18:36:12 2021] Launched synth_1...
+Run output will be captured here: C:/Users/new/Dropbox/Shared DB ATEES/ian/INTEC/Laboratorio de ele digital/Lab0/Proyectos/HolaMundo/HolaMundo.runs/synth_1/runme.log
+[Mon May 10 18:36:12 2021] Launched impl_1...
+Run output will be captured here: C:/Users/new/Dropbox/Shared DB ATEES/ian/INTEC/Laboratorio de ele digital/Lab0/Proyectos/HolaMundo/HolaMundo.runs/impl_1/runme.log
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 4
+CRITICAL WARNING: [filemgmt 20-730] Could not find a top module in the fileset sources_1.
+Resolution: With the gui up, review the source files in the Sources window. Use Add Sources to add any needed sources. If the files are disabled, enable them. You can also select the file and choose Set Used In from the pop-up menu. Review if they are being used at the proper points of the flow.
+[Mon May 10 18:38:05 2021] Launched synth_1...
+Run output will be captured here: C:/Users/new/Dropbox/Shared DB ATEES/ian/INTEC/Laboratorio de ele digital/Lab0/Proyectos/HolaMundo/HolaMundo.runs/synth_1/runme.log
+[Mon May 10 18:38:05 2021] Launched impl_1...
+Run output will be captured here: C:/Users/new/Dropbox/Shared DB ATEES/ian/INTEC/Laboratorio de ele digital/Lab0/Proyectos/HolaMundo/HolaMundo.runs/impl_1/runme.log
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 4
+[Mon May 10 18:42:06 2021] Launched synth_1...
+Run output will be captured here: C:/Users/new/Dropbox/Shared DB ATEES/ian/INTEC/Laboratorio de ele digital/Lab0/Proyectos/HolaMundo/HolaMundo.runs/synth_1/runme.log
+[Mon May 10 18:42:06 2021] Launched impl_1...
+Run output will be captured here: C:/Users/new/Dropbox/Shared DB ATEES/ian/INTEC/Laboratorio de ele digital/Lab0/Proyectos/HolaMundo/HolaMundo.runs/impl_1/runme.log
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 4
+[Mon May 10 18:44:18 2021] Launched synth_1...
+Run output will be captured here: C:/Users/new/Dropbox/Shared DB ATEES/ian/INTEC/Laboratorio de ele digital/Lab0/Proyectos/HolaMundo/HolaMundo.runs/synth_1/runme.log
+[Mon May 10 18:44:18 2021] Launched impl_1...
+Run output will be captured here: C:/Users/new/Dropbox/Shared DB ATEES/ian/INTEC/Laboratorio de ele digital/Lab0/Proyectos/HolaMundo/HolaMundo.runs/impl_1/runme.log
+exit
+INFO: [Common 17-206] Exiting Vivado at Mon May 10 18:45:03 2021...

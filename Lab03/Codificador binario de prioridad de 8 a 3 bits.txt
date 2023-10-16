@@ -1,0 +1,41 @@
+-- Codificador binario de prioridad de 8 a 3 bits
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.std_logic_arith.ALL;
+use IEEE.std_logic_unsigned.ALL;
+
+entity Ej1 is
+Port (
+ 		Q: out std_logic_vector (2 downto 0);
+       	D: in std_logic_vector (7 DOWNTO 0)
+        );
+end Ej1;
+
+architecture Behavioral of Ej1 is
+begin
+
+process(D)
+begin
+if D(7) = '1' then
+    Q <= "111";
+elsif D(6) = '1' then
+    Q <= "110";
+elsif D(5) = '1' then
+    Q <= "101";
+elsif D(4) = '1' then
+    Q <= "100";
+elsif D(3) = '1' then
+    Q <= "011";
+elsif D(2) = '1' then
+    Q <= "010";        
+elsif D(1) = '1' then
+    Q <= "001";
+elsif D(0) = '1' then
+    Q <= "000";
+else 
+    Q <= "000";
+end if;
+end process;
+
+end Behavioral;

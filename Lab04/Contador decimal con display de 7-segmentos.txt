@@ -1,0 +1,158 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.numeric_std.ALL;
+use IEEE.std_logic_arith.ALL;
+use IEEE.std_logic_unsigned.ALL;
+
+entity Lab04 is
+Port (
+ 		reloj: in std_logic; -- Reloj
+ 		
+ 		Disp: out std_logic_vector (7 downto 0); -- Vector que establecerá cuáles displays encender
+       	Num7Seg: out std_logic_vector (6 DOWNTO 0); -- Código del número correspondiente al 7 Segmentos
+       	
+       	Reinicio: in std_logic; -- Botón de reinicio de conteo
+       	GoTo990, GoTo9990: in std_logic -- Botones que me dirigen a 990 o 9990
+        );
+end Lab04;
+
+-----------------------------------------------------
+
+architecture Behavioral of Lab04 is
+	constant NumMax: INTEGER := 49999;
+	constant NumMax2: INTEGER := 49999999;
+	
+	signal conteo: INTEGER range 0 to NumMax;
+	signal conteo2: INTEGER range 0 to NumMax2;
+	
+	signal clck_state, clck_state100: std_logic;
+
+    signal unidad, decena, centena, miles: std_logic_vector (3 downto 0) := "0000";
+    signal Cambio: std_logic_vector(1 downto 0) := "00";    
+
+-----------------------------------------------------
+function BcdTo7Seg (
+    BCD: in std_logic_vector(3 downto 0)) -- Código binario del dígito
+    return std_logic_vector is
+    
+    variable Cod7Seg: std_logic_vector (6 downto 0);
+    
+    begin
+    with BCD select -- Selección de la combinación de ánodos en el display.
+        Cod7Seg :=    ("0000001") WHEN ("0000"),
+            ("1001111") WHEN ("0001"),
+            ("0010010") WHEN ("0010"),
+            ("0000110") WHEN ("0011"),
+            ("1001100") WHEN ("0100"),
+            ("0100100") WHEN ("0101"),
+            ("0100000") WHEN ("0110"),
+            ("0001111") WHEN ("0111"),
+            ("0000000") WHEN ("1000"),
+            ("0000100") WHEN ("1001"),
+            ("1111111") WHEN OTHERS;
+    return Cod7Seg; -- Devolución del respectivo valor.
+end function;
+    
+-----------------------------------------------------
+
+begin
+
+-----------------------------------------------------
+
+Reconteo: process(reloj) -- Va a "mandar una señal" a clock_state cada 1 ms
+begin
+	if reloj'event and reloj = '1' then
+		if conteo < NumMax then 
+			conteo <= conteo + 1;
+		else
+			clck_state <= not clck_state;
+			conteo <= 0;
+		end if;
+	end if;
+end process;
+	
+CentiSec: process (reloj) -- Va a "mandar una señal" a clock_state100 cada 1 s
+begin
+	if reloj'event and reloj = '1' then
+		if conteo2 < NumMax2 then 
+			conteo2 <= conteo2 + 1;
+		else
+			clck_state100 <= not clck_state100;
+			conteo2 <= 0;
+		end if;
+	end if;
+end process;
+
+-----------------------------------------------------
+cambiador: process(clck_state)
+begin 
+    if clck_state'event and clck_state = '1' then
+        if Cambio < "11" then
+            Cambio <= Cambio + 1;
+        else 
+            Cambio <= "00";
+        end if;
+    end if;
+end process;
+
+Contador: process(clck_state100, reinicio, GoTo990, GoTo9990)
+begin
+
+   if reinicio = '1' then
+        unidad <= "0000";
+        decena <= "0000";
+        centena <= "0000";
+        miles <= "0000";
+    elsif GoTo990 = '1' then
+        unidad <= "0000";
+        decena <= "1001";
+        centena <= "1001";
+        miles <= "0000";
+    elsif GoTo9990 = '1' then
+        unidad <= "0000";
+        decena <= "1001";
+        centena <= "1001";
+        miles <= "1001";    
+    elsif clck_state100'event and clck_state100 = '1' then
+    
+        if unidad /= "1001" then
+            unidad <= unidad + 1;
+        else
+            unidad <= "0000";
+            if decena /= 9 then
+                decena <= decena + 1;
+            else 
+                decena <= "0000";
+                if centena /= "1001" then
+                    centena <= centena + 1;
+                else 
+                    centena <= "0000";
+                    if miles /= "1001" then
+                        miles <= miles + 1;
+                    else 
+                        miles <= "0000";       
+                    end if;
+                end if;
+            end if;    
+        end if;           
+   end if;
+end process;    
+
+Muestra_display: process(clck_state, unidad, decena, centena, miles)
+begin 
+    if Cambio = "00" then
+        Disp <= "11111110";
+        Num7Seg <= BcdTo7Seg(unidad);
+    elsif Cambio = "01" then
+        Disp <= "11111101";
+        Num7Seg <= BcdTo7Seg(decena);
+    elsif Cambio = "10" then
+        Disp <= "11111011";
+        Num7Seg <= BcdTo7Seg(centena);
+    else --Cambio = "11" then
+        Disp <= "11110111";
+        Num7Seg <= BcdTo7Seg(miles);         
+    end if;
+end process;
+
+end Behavioral;
