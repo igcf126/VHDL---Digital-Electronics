@@ -1,0 +1,14 @@
+#-----------------------------------------------------------
+# Vivado v2020.2 (64-bit)
+# SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+# IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+# Start of session at: Mon May 10 23:19:25 2021
+# Process ID: 1720
+# Current directory: C:/Users/new/Desktop/Proyectos VHDL/TablaDeVerdad
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent19328 C:\Users\new\Desktop\Proyectos VHDL\TablaDeVerdad\TablaDeVerdad.xpr
+# Log file: C:/Users/new/Desktop/Proyectos VHDL/TablaDeVerdad/vivado.log
+# Journal file: C:/Users/new/Desktop/Proyectos VHDL/TablaDeVerdad\vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project {C:/Users/new/Desktop/Proyectos VHDL/TablaDeVerdad/TablaDeVerdad.xpr}
+update_compile_order -fileset sources_1

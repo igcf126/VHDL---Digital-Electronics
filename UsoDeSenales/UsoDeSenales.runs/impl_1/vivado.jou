@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Vivado v2020.2 (64-bit)
+# SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+# IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+# Start of session at: Mon May 10 19:18:19 2021
+# Process ID: 3788
+# Current directory: C:/Users/new/Desktop/Proyectos VHDL/UsoDeSenales/UsoDeSenales.runs/impl_1
+# Command line: vivado.exe -log UsoDeSenales.vdi -applog -product Vivado -messageDb vivado.pb -mode batch -source UsoDeSenales.tcl -notrace
+# Log file: C:/Users/new/Desktop/Proyectos VHDL/UsoDeSenales/UsoDeSenales.runs/impl_1/UsoDeSenales.vdi
+# Journal file: C:/Users/new/Desktop/Proyectos VHDL/UsoDeSenales/UsoDeSenales.runs/impl_1\vivado.jou
+#-----------------------------------------------------------
+source UsoDeSenales.tcl -notrace
