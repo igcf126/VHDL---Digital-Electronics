@@ -1,0 +1,14 @@
+#-----------------------------------------------------------
+# Vivado v2020.2 (64-bit)
+# SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+# IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+# Start of session at: Tue May 11 23:28:43 2021
+# Process ID: 13936
+# Current directory: C:/Users/new/Desktop/Proyectos VHDL/ALU
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent9432 C:\Users\new\Desktop\Proyectos VHDL\ALU\ALU.xpr
+# Log file: C:/Users/new/Desktop/Proyectos VHDL/ALU/vivado.log
+# Journal file: C:/Users/new/Desktop/Proyectos VHDL/ALU\vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project {C:/Users/new/Desktop/Proyectos VHDL/ALU/ALU.xpr}
+update_compile_order -fileset sources_1

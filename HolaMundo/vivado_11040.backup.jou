@@ -1,0 +1,13 @@
+#-----------------------------------------------------------
+# Vivado v2020.2 (64-bit)
+# SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+# IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+# Start of session at: Tue May 11 14:08:48 2021
+# Process ID: 11040
+# Current directory: C:/Users/new/Desktop/Proyectos VHDL/HolaMundo
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent9712 C:\Users\new\Desktop\Proyectos VHDL\HolaMundo\HolaMundo.xpr
+# Log file: C:/Users/new/Desktop/Proyectos VHDL/HolaMundo/vivado.log
+# Journal file: C:/Users/new/Desktop/Proyectos VHDL/HolaMundo\vivado.jou
+#-----------------------------------------------------------
+sstart_guioopen_project {C:/Users/new/Desktop/Proyectos VHDL/HolaMundo/HolaMundo.xpr}uupdate_compile_order -fileset sources_1
+synth_design -rtl -rtl_skip_mlo -name rtl_1
